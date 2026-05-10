@@ -1,0 +1,75 @@
+/**
+ * Custom theme — Playwright-inspired with green/teal accents
+ */
+
+:root {
+  --ifm-color-primary: #2ead65;
+  --ifm-color-primary-dark: #29a05b;
+  --ifm-color-primary-darker: #279756;
+  --ifm-color-primary-darkest: #207d47;
+  --ifm-color-primary-light: #3aba70;
+  --ifm-color-primary-lighter: #46c178;
+  --ifm-color-primary-lightest: #6acf91;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-font-family-base: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI',
+    Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', 'SF Mono', Menlo, Monaco,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #45c779;
+  --ifm-color-primary-dark: #2fbc69;
+  --ifm-color-primary-darker: #2cb163;
+  --ifm-color-primary-darkest: #249152;
+  --ifm-color-primary-light: #5bd089;
+  --ifm-color-primary-lighter: #67d491;
+  --ifm-color-primary-lightest: #8adda9;
+  --ifm-background-color: #0e1116;
+  --ifm-background-surface-color: #161b22;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Subtle borders + smoother code blocks */
+.theme-code-block {
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Hero gradient on landing page */
+.hero--primary {
+  background: linear-gradient(135deg, #2ead65 0%, #1e7e8c 100%);
+}
+
+/* Cookbook cards on the home page */
+.cb-card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cb-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: var(--ifm-color-primary);
+}
+
+.cb-card h3 {
+  margin-top: 0;
+}
+
+/* Make code in tables a bit smaller */
+table code {
+  font-size: 85%;
+  white-space: nowrap;
+}
+
+/* Tighten markdown vertical rhythm */
+article header h1 {
+  margin-bottom: 0.5em;
+}
