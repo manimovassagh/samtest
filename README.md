@@ -17,9 +17,10 @@ A ready-to-use Playwright test boilerplate with full observability configured ou
 
 ```
 tests/
-  my-tests/
-    sample.spec.ts   # example tests against playwright.dev
+  saucedemo/
+    login.spec.ts    # login tests for all 6 built-in SauceDemo users
 playwright.config.ts
+Makefile
 tsconfig.json
 ```
 
@@ -27,14 +28,45 @@ tsconfig.json
 
 ```bash
 npm install
-npx playwright install
-npx playwright test
+npx playwright install --with-deps
 ```
 
-The HTML report opens automatically after the run. To reopen it later:
+## Running tests
+
+### npm scripts
+
+| Command | What it does |
+|---|---|
+| `npm test` | Run all tests |
+| `npm run test:chromium` | Chromium only |
+| `npm run test:firefox` | Firefox only |
+| `npm run test:webkit` | WebKit only |
+| `npm run test:headed` | Force headed mode (browser visible) |
+| `npm run test:headless` | Force headless mode |
+| `npm run test:login` | Login suite only |
+| `npm run test:login:chromium` | Login suite, Chromium only |
+| `npm run test:ci` | CI mode — headless, 1 worker, no auto-open |
+| `npm run test:debug` | Open Playwright Inspector (step-through) |
+| `npm run test:ui` | Playwright UI mode (interactive) |
+| `npm run test:no-retry` | No retries — fast failure feedback |
+| `npm run report` | Reopen last HTML report |
+| `npm run trace` | Open a trace file |
+
+### Makefile
 
 ```bash
-npx playwright show-report
+make help               # show all targets
+make test               # run all tests
+make test-chromium      # Chromium only
+make test-login         # login suite (Chromium)
+make test-ci            # CI mode
+make test-debug         # Playwright Inspector
+make test-ui            # Playwright UI mode
+make test-no-retry      # no retries
+make report             # reopen HTML report
+make trace FILE=test-results/.../trace.zip
+make clean              # delete test-results/ and playwright-report/
+make install            # npm install + playwright install
 ```
 
 ## Test artifacts

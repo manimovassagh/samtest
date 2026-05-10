@@ -44,6 +44,11 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
+    // Named login profiles — filter tests by tag
+    { name: 'smoke', grep: /@smoke/, use: { ...devices['Desktop Chrome'] } },
+    { name: 'core',  grep: /@core/,  use: { ...devices['Desktop Chrome'] } },
+    { name: 'full',  grep: /@full/,  use: { ...devices['Desktop Chrome'] } },
+
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },

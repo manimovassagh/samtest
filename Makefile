@@ -1,5 +1,6 @@
 .PHONY: test test-chromium test-firefox test-webkit test-headed test-headless \
-        test-login test-ci test-debug test-ui test-no-retry \
+        test-login test-smoke test-core test-full \
+        test-ci test-debug test-ui test-no-retry \
         report trace clean install help
 
 # ── Default ────────────────────────────────────────────────────────────────────
@@ -17,6 +18,9 @@ help:
 	@echo "  make test-ci           CI mode: headless, 1 worker, no report auto-open"
 	@echo ""
 	@echo "  make test-login        Run login suite only (chromium)"
+	@echo "  make test-smoke        1-user profile  (standard_user)"
+	@echo "  make test-core         2-user profile  (standard_user + locked_out_user)"
+	@echo "  make test-full         All-user profile (all 6 SauceDemo users)"
 	@echo "  make test-debug        Open Playwright Inspector for step-through"
 	@echo "  make test-ui           Open Playwright UI mode"
 	@echo "  make test-no-retry     Run once, no retries (fast failure feedback)"
@@ -63,6 +67,15 @@ test-ci:
 # ── Specific suites ────────────────────────────────────────────────────────────
 test-login:
 	npx playwright test tests/saucedemo/login.spec.ts --project=chromium
+
+test-smoke:
+	npx playwright test --project=smoke
+
+test-core:
+	npx playwright test --project=core
+
+test-full:
+	npx playwright test --project=full
 
 # ── Debugging ──────────────────────────────────────────────────────────────────
 # Opens Playwright Inspector: step through actions, inspect locators live
