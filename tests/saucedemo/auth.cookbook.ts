@@ -35,7 +35,7 @@ const AUTH_FILE = path.join(__dirname, '.auth', 'standard_user.json');
 // playwright.config.ts:  globalSetup: './global-setup.ts'
 // ═══════════════════════════════════════════════════════════════════════════
 
-test('save auth state to file (run once as setup)', async ({ page }) => {
+base('save auth state to file (run once as setup)', async ({ page }) => {
   // Perform the full UI login.
   await page.goto('/');
   await page.getByTestId('username').fill('standard_user');
@@ -189,7 +189,7 @@ testMultiUser('two users simultaneously in separate contexts', async ({ loginAs 
 // When you know the exact token format, skip the UI entirely.
 // ═══════════════════════════════════════════════════════════════════════════
 
-test('inject session cookie manually', async ({ context, page }) => {
+base('inject session cookie manually', async ({ context, page }) => {
   // SauceDemo uses localStorage, not cookies — but this is the pattern for cookie-based auth:
   await context.addCookies([
     {

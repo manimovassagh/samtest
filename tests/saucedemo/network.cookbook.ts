@@ -182,20 +182,20 @@ test('count requests made during login', async ({ page }) => {
 // PART 5 — Route once vs every request
 //
 // route() matches every request by default.
-// route.once() matches only the NEXT matching request then removes itself.
+// Pass { times: N } to remove the handler after N matches.
 // ═══════════════════════════════════════════════════════════════════════════
 
-test('route.once — only intercepts first matching request', async ({ page }) => {
+test('times: 1 — only intercepts first matching request', async ({ page }) => {
   let callCount = 0;
 
-  // This will only fire once — subsequent requests to '/' pass through normally.
-  await page.routeOnce('**/', route => {
+  // This handler fires once then auto-removes — subsequent requests pass through.
+  await page.route('**/', route => {
     callCount++;
     route.continue();
-  });
+  }, { times: 1 });
 
   await page.goto('/');
-  await page.reload();  // second navigation — routeOnce already removed itself
+  await page.reload();  // second navigation — handler already removed itself
 
   expect(callCount).toBe(1);
 });
