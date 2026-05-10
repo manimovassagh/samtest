@@ -24,13 +24,13 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['list'],
-    ['html', { open: 'always' }],
+    ['html', { open: process.env.CI ? 'never' : 'always' }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL: 'https://www.saucedemo.com',
     testIdAttribute: 'data-test',
-    headless: false,
+    headless: !!process.env.CI,
     trace: 'on',
     screenshot: 'on',
     video: 'on',

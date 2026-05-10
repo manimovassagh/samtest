@@ -4,7 +4,8 @@ A ready-to-use Playwright test boilerplate with full observability configured ou
 
 ## What's included
 
-- **Headed mode** — browser window is visible during test runs
+- **CI pipeline** — GitHub Actions workflow runs tests on every push/PR and uploads artifacts
+- **Headed mode** — browser window is visible during local runs (headless automatically in CI)
 - **Traces** — always-on trace recording per test (timeline, DOM snapshots, network, console)
 - **Screenshots** — captured automatically at the end of every test
 - **Video** — full screen recording for every test
@@ -45,3 +46,16 @@ Each test writes its artifacts to `test-results/<test-name>/`:
 | `trace.zip` | Full trace — open via `npx playwright show-trace` or trace.playwright.dev |
 | `video.webm` | Screen recording of the test |
 | `*.png` | Screenshot at test completion |
+
+## CI — GitHub Actions
+
+The workflow at `.github/workflows/playwright.yml` runs on every push and PR to `main`.
+
+After each run, two artifacts are uploaded and available in the GitHub Actions summary:
+
+| Artifact | Contents | Retention |
+|---|---|---|
+| `playwright-report` | Full HTML report with embedded traces, video, screenshots | 30 days |
+| `test-results` | Raw trace zips, videos, and screenshots per test | 30 days |
+
+To view them: go to the Actions tab → click the run → scroll to **Artifacts** at the bottom.
