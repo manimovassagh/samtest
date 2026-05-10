@@ -1,93 +1,74 @@
-# Playwright Test Skill
+# playwright-test — Claude Code Skill
 
-A modular Claude Code skill that knows this project's Playwright setup
-inside-out — writing tests, designing fixtures, debugging failures,
-configuring `playwright.config.ts`, running the CLI, and integrating with
-the Playwright MCP server.
+Modular skill that gives Claude Code expert knowledge of this project's
+Playwright setup. Tests, fixtures, config, CLI, MCP, CI — each as a
+separate reference file loaded on demand.
 
-## What's in here
+For human-facing docs, the cookbook index, recipes, and getting started,
+see the [project README](../../../README.md).
+
+## Layout
 
 ```
-.github/skills/playwright-test/
-├── SKILL.md                         ← entry point (read first)
-├── README.md                        ← this file
+playwright-test/
+├── SKILL.md                ← Entry point — when to load each reference
+├── README.md               ← This file
 └── references/
-    ├── writing-tests.md             ← Locators, assertions, structure
-    ├── advanced-config.md           ← playwright.config.ts deep dive
-    ├── cli.md                       ← Every useful playwright CLI flag
-    ├── mcp.md                       ← Playwright MCP + Chrome DevTools MCP
-    ├── fixtures.md                  ← Custom fixtures, scopes, composition
-    ├── network.md                   ← Route mocking, request interception
-    ├── auth.md                      ← storageState, login-once patterns
-    ├── debugging.md                 ← Trace viewer, UI mode, Inspector
-    ├── ci.md                        ← GitHub Actions, sharding, Docker
-    └── reporters.md                 ← HTML, JUnit, JSON, custom reporters
+    ├── writing-tests.md     Locators, assertions, structure, anti-patterns
+    ├── advanced-config.md   playwright.config.ts deep dive
+    ├── cli.md               Every useful CLI flag, recipes
+    ├── mcp.md               Playwright MCP + Chrome DevTools MCP
+    ├── fixtures.md          Custom fixtures, scopes, composition
+    ├── network.md           Route mocking, interception, HAR
+    ├── auth.md              storageState, login-once patterns
+    ├── debugging.md         Trace viewer, UI mode, Inspector
+    ├── ci.md                GitHub Actions, sharding, Docker
+    └── reporters.md         HTML, JUnit, JSON, custom reporters
 ```
 
-`SKILL.md` is short on purpose — it lists which reference to load for each
-type of task (progressive disclosure). References are loaded on demand so
-the agent only reads what's relevant.
+`SKILL.md` is intentionally short — it's a router that tells the agent
+*which reference* to load for *which kind of task*. References are loaded
+only when needed (progressive disclosure).
 
-## How a human uses this
+## How to make Claude Code auto-load this
 
-Just read the file you need. Every reference has a table of contents and
-working code examples grounded in this project (saucedemo, `data-test`
-attributes, `@smoke`/`@core`/`@full` projects).
-
-Pair with the runnable cookbooks under [tests/saucedemo/](../../../tests/saucedemo/):
-
-| Cookbook | Covers |
-|---|---|
-| `inline-config.cookbook.ts` | `tag`, `annotation`, `mode`, `retries`, `timeout` |
-| `fixtures.cookbook.ts` | Custom fixtures, worker-scoped, auto-use |
-| `network.cookbook.ts` | `route`, `fulfill`, `abort`, `times` |
-| `assertions.cookbook.ts` | Web-first, soft, `expect.poll`, custom matchers |
-| `auth.cookbook.ts` | storageState, worker auth, multi-user |
-| `page-objects.cookbook.ts` | POM, component objects, fixture-powered |
-
-## How Claude Code uses this
-
-Claude Code auto-discovers skills from a few well-known locations:
+Claude Code's skill discovery looks in three places:
 
 | Location | Scope |
 |---|---|
-| `~/.claude/skills/` | Personal — only loads on your machine |
-| `<repo>/.claude/skills/` | **Project-scoped — auto-loads for anyone who clones the repo** |
-| Plugin directories | Distributed via plugin manifest |
+| `~/.claude/skills/` | Personal — your laptop only |
+| `<repo>/.claude/skills/` | **Project-scoped — auto-loads for anyone who clones** |
+| Plugin manifests | Distributed via a plugin |
 
-**`.github/skills/` is NOT auto-discovered.** It works as documentation that
-the team can read, but Claude Code won't load it as a triggerable skill from
-this location.
+**`.github/skills/` is NOT one of them.** Files here are readable as docs
+but Claude Code won't trigger the skill from this path.
 
-### To make it auto-load as a skill
-
-Symlink or copy into `.claude/skills/` (which IS auto-discovered):
-
-```bash
-# from repo root
-mkdir -p .claude/skills
-ln -s ../../.github/skills/playwright-test .claude/skills/playwright-test
-```
-
-Or move the folder entirely:
+To make it auto-load for the team, run from the repo root:
 
 ```bash
 mkdir -p .claude/skills
 mv .github/skills/playwright-test .claude/skills/
+git add -A && git commit -m "Move Playwright skill to .claude/skills for auto-load"
 ```
 
-Either way, commit the result so teammates get it on clone.
+After that, anyone who clones the repo and opens it in Claude Code gets
+the skill automatically.
 
-### Why `.github/` then?
+### Why `.github/skills/` at all?
 
-If you'd rather keep `.claude/` out of the repo (e.g. you already gitignore
-it for personal settings), `.github/skills/` is a reasonable place for the
-skill content to live as shared reference docs — the team can still read
-the markdown files even if Claude Code doesn't auto-load them.
+Two reasons you might prefer it here:
 
-## Conventions enforced
+1. **Team can read it as plain docs** — `.github/` is a familiar location
+   for shared project conventions
+2. **Avoids the `.claude/` folder entirely** — if you gitignore `.claude/`
+   for personal settings, this keeps the skill separate
 
-When this skill is in use, generated tests will:
+The trade-off: no auto-trigger. Agents have to be told to read these
+files explicitly.
+
+## Conventions this skill enforces
+
+When the skill is loaded, generated tests will:
 
 - Import from `@playwright/test` (not `playwright`)
 - Use `page.getByTestId(...)` first (this project's `data-test` attribute)
@@ -96,4 +77,17 @@ When this skill is in use, generated tests will:
 - Live under `tests/<feature>/` with `*.spec.ts` suffix
 - Avoid `page.waitForTimeout()` and other anti-patterns
 
-See [SKILL.md](./SKILL.md#output-style-for-this-skill) for the full list.
+Full conventions list in [`SKILL.md`](./SKILL.md#output-style-for-this-skill).
+
+## Updating the skill
+
+The references are written for Playwright `^1.59.x`. When upgrading:
+
+1. Check the [Playwright release notes](https://github.com/microsoft/playwright/releases)
+   for deprecations or new APIs
+2. Update the relevant reference file(s) — they're independent
+3. If you add a new reference, also list it in [`SKILL.md`](./SKILL.md#when-to-load-each-reference)
+   so the agent knows when to load it
+
+Reference files are designed to be **self-contained** — each has a table
+of contents and works as a standalone document.
