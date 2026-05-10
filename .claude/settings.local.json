@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Read(//Users/mani/.claude/**)",
-      "Read(//Users/mani/.claude/skills/**)"
-    ]
-  }
-}
