@@ -1,41 +1,7 @@
 import { test, expect } from '@playwright/test';
+import { users, profileUsers } from './users';
 
 const PASSWORD = 'secret_sauce';
-
-// All 6 built-in SauceDemo users with their expected login outcome
-const users = [
-  {
-    username: 'standard_user',
-    expectSuccess: true,
-    description: 'logs in and reaches inventory',
-  },
-  {
-    username: 'locked_out_user',
-    expectSuccess: false,
-    errorMessage: 'Sorry, this user has been locked out.',
-    description: 'is blocked with a locked-out error',
-  },
-  {
-    username: 'problem_user',
-    expectSuccess: true,
-    description: 'logs in (images broken but page loads)',
-  },
-  {
-    username: 'performance_glitch_user',
-    expectSuccess: true,
-    description: 'logs in after an artificial delay',
-  },
-  {
-    username: 'error_user',
-    expectSuccess: true,
-    description: 'logs in (errors appear on later interactions)',
-  },
-  {
-    username: 'visual_user',
-    expectSuccess: true,
-    description: 'logs in (visual differences on inventory)',
-  },
-];
 
 // ─── Example 1: plain parametrised tests (no profiles) ───────────────────────
 test.describe('Login', () => {
@@ -62,8 +28,8 @@ test.describe('Login', () => {
 
 // ─── Example 2: same tests with named profiles via tags ───────────────────────
 //
-// Each user carries a `tags` list that maps to a Playwright project in
-// playwright.config.ts. Run a specific profile with:
+// Each user in profileUsers (tests/saucedemo/users.ts) carries a `tags` list
+// that maps to a Playwright project in playwright.config.ts. Run a profile with:
 //
 //   npm run test:smoke   →  1 user  (standard_user — fast happy-path check)
 //   npm run test:core    →  2 users (adds locked_out_user for the error path)
@@ -72,46 +38,6 @@ test.describe('Login', () => {
 //   make test-smoke / test-core / test-full
 //
 test.describe('Login — profiles (@smoke / @core / @full)', () => {
-  const profileUsers = [
-    {
-      username: 'standard_user',
-      expectSuccess: true,
-      description: 'logs in and reaches inventory',
-      tags: ['@smoke', '@core', '@full'],
-    },
-    {
-      username: 'locked_out_user',
-      expectSuccess: false,
-      errorMessage: 'Sorry, this user has been locked out.',
-      description: 'is blocked with a locked-out error',
-      tags: ['@core', '@full'],
-    },
-    {
-      username: 'problem_user',
-      expectSuccess: true,
-      description: 'logs in (images broken but page loads)',
-      tags: ['@full'],
-    },
-    {
-      username: 'performance_glitch_user',
-      expectSuccess: true,
-      description: 'logs in after an artificial delay',
-      tags: ['@full'],
-    },
-    {
-      username: 'error_user',
-      expectSuccess: true,
-      description: 'logs in (errors appear on later interactions)',
-      tags: ['@full'],
-    },
-    {
-      username: 'visual_user',
-      expectSuccess: true,
-      description: 'logs in (visual differences on inventory)',
-      tags: ['@full'],
-    },
-  ];
-
   for (const user of profileUsers) {
     test(`${user.username} — ${user.description}`, { tag: user.tags }, async ({ page }) => {
       await page.goto('/');
