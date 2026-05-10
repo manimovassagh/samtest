@@ -131,7 +131,7 @@ class CartPage {
 // PART 2 — Tests using the page objects
 // ═══════════════════════════════════════════════════════════════════════════
 
-test('login success — chained page objects', async ({ page }) => {
+base('login success — chained page objects', async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
 
@@ -141,7 +141,7 @@ test('login success — chained page objects', async ({ page }) => {
   await expect(inventoryPage.items).toHaveCount(6);
 });
 
-test('login failure — error message', async ({ page }) => {
+base('login failure — error message', async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
 
@@ -149,7 +149,7 @@ test('login failure — error message', async ({ page }) => {
   await loginPage.expectError('locked out');
 });
 
-test('add items to cart and navigate', async ({ page }) => {
+base('add items to cart and navigate', async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   const inventory = await loginPage.loginAs('standard_user');
@@ -205,7 +205,7 @@ class HamburgerMenu {
   }
 }
 
-test('component object — hamburger menu', async ({ page }) => {
+base('component object — hamburger menu', async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   await loginPage.loginAs('standard_user');
@@ -231,7 +231,7 @@ type PomFixtures = {
   inventoryPage: InventoryPage;
 };
 
-const test = base.extend<PomFixtures>({
+const testWithPoms = base.extend<PomFixtures>({
   loginPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
@@ -245,12 +245,12 @@ const test = base.extend<PomFixtures>({
   },
 });
 
-test('fixture-powered POM — inventory pre-loaded', async ({ inventoryPage }) => {
+testWithPoms('fixture-powered POM — inventory pre-loaded', async ({ inventoryPage }) => {
   await expect(inventoryPage.items).toHaveCount(6);
   await expect(inventoryPage.cartLink).toBeVisible();
 });
 
-test('fixture-powered POM — sort products', async ({ inventoryPage }) => {
+testWithPoms('fixture-powered POM — sort products', async ({ inventoryPage }) => {
   await inventoryPage.sortBy('hilo');
 
   const names = await inventoryPage.page
