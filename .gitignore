@@ -9,3 +9,8 @@ node_modules/
 
 # Claude Code — personal-machine state only
 .claude/settings.local.json
+
+# Docusaurus build output and node_modules (docs site has its own gitignore too)
+/docs/build/
+/docs/.docusaurus/
+/docs/node_modules/

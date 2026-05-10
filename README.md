@@ -5,6 +5,11 @@ cookbook. Every pattern you need — fixtures, network mocking, authentication,
 page objects, custom matchers — is in this repo as a runnable `.cookbook.ts`
 file you can read, copy, and adapt.
 
+> 📖 **Full docs (Docusaurus + live test report)**: https://manimovassagh.github.io/samtest/
+>
+> Source for the docs site lives in [`docs/`](docs/) — auto-deployed via
+> [`.github/workflows/docs.yml`](.github/workflows/docs.yml) on every push to `main`.
+
 ## Quick start
 
 ```bash
